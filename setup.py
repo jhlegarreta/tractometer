@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from setuptools import setup
+from Cython.Build import cythonize
 from Cython.Distutils import Extension
 from Cython.Distutils import build_ext
 
@@ -56,13 +57,11 @@ dependencies = ['dipy', 'nibabel']
 setup(name='tractometer', version='1.0.1',
       description='Scoring system used for the ISMRM 2015 Tractography Challenge',
       url='https://github.com/scilus/ismrm_2015_tractography_challenge_scoring',
-      ext_modules=ext_modules, author='The challenge team',
+      ext_modules=cythonize(ext_modules), author='The challenge team',
       author_email='jean-christophe.houde@usherbrooke.ca',
       packages=['challenge_scoring',
                 'challenge_scoring.io',
                 'challenge_scoring.metrics',
                 'challenge_scoring.tractanalysis',
                 'challenge_scoring.utils'],
-      scripts=glob('scripts/*.py'), install_requires=dependencies,
-      cmdclass={'build_ext': deactivate_default_build_ext,
-                'build_all': build_inplace_all_ext})
+      scripts=glob('scripts/*.py'), install_requires=dependencies)
