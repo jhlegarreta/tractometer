@@ -24,7 +24,6 @@ it is not mandatory. Once setup, run
 
 ```bash
 pip install -r requirements.txt
-pip install -r requirements_additional.txt
 ```
 
 You can then clone or download the scoring system. Once cloned or

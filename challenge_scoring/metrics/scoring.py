@@ -14,8 +14,6 @@ from dipy.segment.clustering import QuickBundles
 from dipy.segment.metric import AveragePointwiseEuclideanMetric
 from dipy.tracking.metrics import length as slength
 
-from tractconverter.formats.tck import TCK
-
 from challenge_scoring import NB_POINTS_RESAMPLE
 from challenge_scoring.io.streamlines import get_tracts_voxel_space_for_dipy, \
                                        save_tracts_tck_from_dipy_voxel_space, \
@@ -202,8 +200,7 @@ def score_submission(streamlines_fname,
     if len(rejected_streamlines) > 0 and save_full_nc:
         out_nc_fname = os.path.join(segmented_out_dir,
                                     '{}_NC.tck'.format(segmented_base_name))
-        out_file = TCK.create(out_nc_fname)
-        save_tracts_tck_from_dipy_voxel_space(out_file, ref_anat_fname,
+        save_tracts_tck_from_dipy_voxel_space(out_nc_fname, ref_anat_fname,
                                               rejected_streamlines)
 
     VC /= total_strl_count
@@ -211,8 +208,8 @@ def score_submission(streamlines_fname,
     NC = len(rejected_streamlines) / total_strl_count
     VCWP = 0
 
-    nb_VB_found = [v['nb_streamlines'] > 0 for k, v in found_vbs_info.iteritems()].count(True)
-    streamlines_per_bundle = {k: v['nb_streamlines'] for k, v in found_vbs_info.iteritems() if v['nb_streamlines'] > 0}
+    nb_VB_found = [v['nb_streamlines'] > 0 for k, v in found_vbs_info.items()].count(True)
+    streamlines_per_bundle = {k: v['nb_streamlines'] for k, v in found_vbs_info.items() if v['nb_streamlines'] > 0}
 
     scores = {}
     scores['version'] = 2

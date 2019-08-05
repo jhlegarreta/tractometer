@@ -23,14 +23,14 @@ def save_attribs(attribs_filepath, attribs):
 
 
 def merge_attribs(orig_attribs, additional_attribs, overwrite=False):
-    for fname, attr in additional_attribs.iteritems():
+    for fname, attr in additional_attribs.items():
         orig_value = orig_attribs.get(fname, None)
 
         if orig_value is None:
             # Item was not in dictionary
             orig_attribs[fname] = attr
         else:
-            for new_attr, new_val in attr.iteritems():
+            for new_attr, new_val in attr.items():
                 orig_attrib_val = orig_value.get(new_attr, None)
 
                 # If we didn't find the attribute, or the attribute
