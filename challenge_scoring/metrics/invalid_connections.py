@@ -8,7 +8,7 @@ import logging
 import os
 import random
 
-import dipy.segment.quickbundles as qb
+from dipy.segment.clustering import QuickBundles
 import numpy as np
 from scipy.spatial.distance import cdist
 
@@ -114,10 +114,8 @@ def group_and_assign_ibs(candidate_streamlines, ROIs,
     random.shuffle(candidate_streamlines)
 
     # TODO threshold on distance as arg for other datasets
-    out_data = qb.QuickBundles(candidate_streamlines,
-                               dist_thr=20.,
-                               pts=12)
-    clusters = out_data.clusters()
+    qb = QuickBundles(threshold=20., metric="MDF_12points")
+    clusters = qb.cluster(candidate_streamlines)
 
     logging.debug("Found {} potential IB clusters".format(len(clusters)))
 
