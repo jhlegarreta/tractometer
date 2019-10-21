@@ -115,7 +115,7 @@ def group_and_assign_ibs(candidate_streamlines, ROIs,
 
     # TODO threshold on distance as arg for other datasets
     qb = QuickBundles(threshold=20., metric="MDF_12points")
-    clusters = qb.cluster(candidate_streamlines)
+    clusters = qb.cluster(candidate_streamlines).clusters
 
     logging.debug("Found {} potential IB clusters".format(len(clusters)))
 
@@ -129,11 +129,11 @@ def group_and_assign_ibs(candidate_streamlines, ROIs,
     all_ics_closest_pairs = get_closest_roi_pairs_for_all_streamlines(candidate_streamlines, rois_info)
 
     for c_idx, c in enumerate(clusters):
-        closest_for_cluster = [all_ics_closest_pairs[i] for i in clusters[c]['indices']]
+        closest_for_cluster = [all_ics_closest_pairs[i] for i in c.indices]
 
         # Clusters containing only a single streamlines are rejected.
-        if len(clusters[c]['indices']) > 1:
-            ic_counts += len(clusters[c]['indices'])
+        if len(c.indices) > 1:
+            ic_counts += len(c.indices)
             occurences = Counter(closest_for_cluster)
 
             # TODO could be changed in future to allow an equality
@@ -150,7 +150,7 @@ def group_and_assign_ibs(candidate_streamlines, ROIs,
             else:
                 val.append(c_idx)
         else:
-            rejected_streamlines.append(candidate_streamlines[clusters[c]['indices'][0]])
+            rejected_streamlines.append(candidate_streamlines[c.indices[0]])
 
     if save_ibs or save_full_ic:
         save_invalid_connections(ib_pairs, candidate_streamlines,
