@@ -193,7 +193,7 @@ def save_invalid_connections(ib_info, streamlines, ic_clusters,
         out_strl = []
         for c_idx in v:
             out_strl.extend([s for s in np.array(streamlines)[
-                ic_clusters[c_idx]['indices']]])
+                ic_clusters[c_idx].indices]])
 
         if save_ibs:
             out_fname = os.path.join(out_segmented_dir,
