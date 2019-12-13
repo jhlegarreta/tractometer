@@ -139,10 +139,10 @@ def save_tracts_tck_from_dipy_voxel_space(fname, ref_anat_fname,
     transformed = [np.dot(c_[s, np.ones([s.shape[0], 1], dtype='<f4')],
                           index_to_world_affine)[:, :-1] for s in tracts]
 
-    # ToDo
-    # Check that the affine is the correct one
+    # The affine is already applied to the streamlines with the above dot
+    # product, so pass the identity as the affine_to_rasmm
     tractogram = nb.streamlines.tractogram.Tractogram(
-        streamlines=transformed, affine_to_rasmm=index_to_world_affine)
+        streamlines=transformed, affine_to_rasmm=np.eye(4))
 
     fobj = nb.streamlines.tck.TckFile(tractogram)
     fobj.save(fname)
