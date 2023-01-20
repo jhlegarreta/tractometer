@@ -1,68 +1,74 @@
 #!/usr/bin/env python
-from setuptools import setup
-from Cython.Build import cythonize
-from Cython.Distutils import Extension
-from Cython.Distutils import build_ext
 
-from glob import glob
 import os
+from glob import glob
+from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext
 
-try:
-  import numpy
-except ImportError as e:
-    e.args += ("Try running pip install numpy",)
-    raise e
 
-try:
-  import scipy
-except ImportError as e:
-    e.args += ("Try running pip install scipy",)
-    raise e
+with open('requirements.txt') as f:
+    required_dependencies = f.read().splitlines()
+    external_dependencies = []
+    for dependency in required_dependencies:
+        if dependency[0:2] == '-e':
+            repo_name = dependency.split('=')[-1]
+            repo_url = dependency[3:]
+            external_dependencies.append('{} @ {}'.format(repo_name, repo_url))
+        else:
+            external_dependencies.append(dependency)
 
-class deactivate_default_build_ext(build_ext):
+ext_modules = [
+    Extension(
+        'challenge_scoring.tractanalysis.robust_streamlines_metrics',
+        ['challenge_scoring/tractanalysis/robust_streamlines_metrics.pyx']
+    )
+]
+
+
+class CustomBuildExtCommand(build_ext):
+    """Build_ext command to use when numpy headers are needed."""
 
     def run(self):
-        print("Please use one of the custom commands to build this project.\n" +
-              "To see the list of commands, check the 'Extra commands' section of\n" +
-              "   python setup.py --help-commands")
+        # Now that the requirements are installed, get everything from numpy
+        from Cython.Build import cythonize
+        from numpy import get_include
 
+        # Add everything requires for build
+        self.swig_opts = None
+        include_dirs = [get_include(),
+                        os.path.join(
+                            os.path.dirname(
+                                os.path.realpath(__file__)),
+                            'challenge_scoring/c_src')]
+        self.include_dirs = include_dirs
+        self.distribution.ext_modules[:] = cythonize(
+            self.distribution.ext_modules,
+            compiler_directives={'language_level': '3'})
 
-# Will try to build all extension modules
-# Forced to be inplace for ease of import.
-# TODO change this
-class build_inplace_all_ext(build_ext):
-
-    description = "build optimized code (.pyx files) " +\
-                  "(compile/link inplace)"
-
-    # Override to keep only the stats extension.
-    def finalize_options(self):
-        # Force inplace building for ease of importation
-        self.inplace = True
-
+        # Call original build_ext command
         build_ext.finalize_options(self)
+        build_ext.run(self)
 
 
-ext_modules = []
-ext_modules.append(Extension('challenge_scoring.tractanalysis.robust_streamlines_metrics',
-                             ['challenge_scoring/tractanalysis/robust_streamlines_metrics.pyx'],
-                             include_dirs=[numpy.get_include(),
-                                           os.path.join(
-                                               os.path.dirname(
-                                                   os.path.realpath(__file__)),
-                                               'challenge_scoring/c_src')]))
+opts = dict(
+    name='tractometer', version='1.0.1',
+    description='Scoring system used for the ISMRM 2015 Tractography Challenge',
+    url='https://github.com/scilus/ismrm_2015_tractography_challenge_scoring',
+    ext_modules=ext_modules,
+    author='The challenge team',
+    author_email='jean-christophe.houde@usherbrooke.ca',
+    packages=[
+        'challenge_scoring',
+        'challenge_scoring.io',
+        'challenge_scoring.metrics',
+        'challenge_scoring.tractanalysis',
+        'challenge_scoring.utils'
+    ],
+    cmdclass={'build_ext': CustomBuildExtCommand},
+    setup_requires=['Cython'],
+    scripts=glob('scripts/*.py'),
+    install_requires=external_dependencies,
+    requires=['numpy', 'scipy']
+)
 
-dependencies = ['dipy', 'nibabel']
-
-setup(name='tractometer', version='1.0.1',
-      description='Scoring system used for the ISMRM 2015 Tractography Challenge',
-      url='https://github.com/scilus/ismrm_2015_tractography_challenge_scoring',
-      ext_modules=cythonize(ext_modules), author='The challenge team',
-      author_email='jean-christophe.houde@usherbrooke.ca',
-      packages=['challenge_scoring',
-                'challenge_scoring.io',
-                'challenge_scoring.metrics',
-                'challenge_scoring.tractanalysis',
-                'challenge_scoring.utils'],
-      setup_requires=['cython',],
-      scripts=glob('scripts/*.py'), install_requires=dependencies)
+setup(**opts)
