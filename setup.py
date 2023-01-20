@@ -64,4 +64,5 @@ setup(name='tractometer', version='1.0.1',
                 'challenge_scoring.metrics',
                 'challenge_scoring.tractanalysis',
                 'challenge_scoring.utils'],
+      setup_requires=['cython',],
       scripts=glob('scripts/*.py'), install_requires=dependencies)
