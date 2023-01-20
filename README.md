@@ -1,6 +1,6 @@
 # ISMRM 2015 Tractography Challenge Scoring system
 
-[![Build status](https://github.com/jhlegarreta/tractometer/actions/workflows/test_package.yml/badge.svg?branch=main)](https://github.com/jhlegarreta/tractometer/actions/workflows/test_package.yml?query=branch%3Amain)
+[![test, package](https://github.com/jhlegarreta/tractometer/actions/workflows/test_package.yml/badge.svg)](https://github.com/jhlegarreta/tractometer/actions/workflows/test_package.yml)
 
 This system contains the scripts and tools that can be used to 
 recreate the results of the ISMRM 2015 Tractography Challenge and to
