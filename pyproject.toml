@@ -22,7 +22,7 @@ dependencies = [
     "Cython",
     "dipy",
     "nibabel",
-    "numpy",
+    "numpy == 1.20.3",
     "scipy",
 ]
 description = "Scoring system used for the ISMRM 2015 Tractography Challenge',"
