@@ -1,0 +1,35 @@
+[build-system]
+requires = [
+    "setuptools >= 66",
+    "wheel",
+    "setuptools_scm >= 6.4",
+    "Cython",
+    "numpy",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 79
+target-version = ["py38"]
+exclude ='''
+(
+  /(
+      \.eggs        # exclude a few common directories in the
+    | \.git         # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | data            # also separately exclude project-specific files
+                    # and folders in the root of the project
+)
+'''
+[tool.isort]
+profile = "black"
+line_length = 79
+src_paths = ["challenge_scoring"]
