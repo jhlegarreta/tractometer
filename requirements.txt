@@ -1,6 +1,0 @@
-setuptools
-numpy
-scipy
-nibabel
-Cython
-dipy

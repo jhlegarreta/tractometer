@@ -1,0 +1,99 @@
+[build-system]
+requires = [
+    "setuptools >= 66",
+    "wheel",
+    "setuptools_scm >= 6.4",
+    "Cython",
+    "numpy",
+
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+authors = [
+  {name = "The challenge team"}, {email = "jean-christophe.houde@usherbrooke.ca"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+dependencies = [
+    "Cython",
+    "dipy",
+    "nibabel",
+    "numpy",
+    "scipy",
+]
+description = "Scoring system used for the ISMRM 2015 Tractography Challenge"
+dynamic = ["version"]
+keywords = ["DWI, neuroimaging, tractography"]
+maintainers = [
+  {name = "Jon Haitz Legarreta"}, {email = "jon.haitz.legarreta@gmail.com"}
+]
+name = "challenge_scoring"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+test = [
+    "hypothesis >= 6.8.0",
+    "pytest == 7.2.0",
+    "pytest-cov",
+    "pytest-pep8",
+    "pytest-xdist",
+]
+dev = [
+    "black == 21.5b1",
+    "flake8 == 3.9.2",
+    "flake8-docstrings == 1.6.0",
+    "isort == 5.11.5",
+    "pre-commit >= 2.9.0",
+]
+
+[project.scripts]
+score_tractogram = "scripts:score_tractogram.main"
+
+[options.extras_require]
+all = [
+    "%(test)s",
+]
+
+[project.urls]
+homepage = "https://github.com/scilus/ismrm_2015_tractography_challenge_scoring"
+documentation = "https://github.com/scilus/ismrm_2015_tractography_challenge_scoring"
+repository = "https://github.com/scilus/ismrm_2015_tractography_challenge_scoring"
+
+[tool.black]
+line-length = 79
+target-version = ["py310"]
+exclude ='''
+(
+  /(
+      \.eggs        # exclude a few common directories in the
+    | \.git         # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | data            # also separately exclude project-specific files
+                    # and folders in the root of the project
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 79
+src_paths = ["challenge_scoring"]
+
+[tool.setuptools.packages]
+find = {}  # Scanning implicit namespaces is active by default
+
+[tool.setuptools_scm]
+write_to = "challenge_scoring/_version.py"
