@@ -3,8 +3,8 @@ requires = [
     "setuptools >= 66",
     "wheel",
     "setuptools_scm >= 6.4",
-    "Cython",
-    "numpy",
+    "Cython == 0.29.37",
+    "numpy == 1.23.5",
 
 ]
 build-backend = "setuptools.build_meta"
@@ -20,10 +20,10 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Medical Science Apps.",
 ]
 dependencies = [
-    "Cython",
+    "Cython == 0.29.37",
     "dipy",
     "nibabel",
-    "numpy",
+    "numpy == 1.23.5",
     "scipy",
 ]
 description = "Scoring system used for the ISMRM 2015 Tractography Challenge"
