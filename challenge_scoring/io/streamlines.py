@@ -44,7 +44,7 @@ def _get_tracts_over_grid(tract_fname, ref_anat_fname, tract_attributes,
     # Get information on the supporting anatomy
     ref_img = nb.load(ref_anat_fname)
 
-    index_to_world_affine = ref_img.get_header().get_best_affine()
+    index_to_world_affine = ref_img.header.get_best_affine()
 
     # ToDo
     # Check the conditions (nibabel has no VTK format)
@@ -130,7 +130,7 @@ def save_tracts_tck_from_dipy_voxel_space(fname, ref_anat_fname,
     # Get information on the supporting anatomy
     ref_img = nb.load(ref_anat_fname)
 
-    index_to_world_affine = ref_img.get_header().get_best_affine()
+    index_to_world_affine = ref_img.header.get_best_affine()
 
     # Transposed for efficient computations later on.
     index_to_world_affine = index_to_world_affine.T.astype('<f4')
